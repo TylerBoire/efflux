@@ -1,0 +1,2 @@
+class EffluxApiException(Exception):
+    pass

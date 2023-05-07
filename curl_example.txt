@@ -1,0 +1,12 @@
+ curl --header "Content-Type: application/json" --header "Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIyN2U3YjE5Mi1hMmI2LTQ3OTMtYTRiNy05M2I0YzEzYTY0ZDEiLCJJc3N1ZWRBdCI6IjIwMjItMDUtMTMgMTg6Mzk6NTIuODc2OTA2MDA2ICswMDAwIFVUQyIsIklzc3VlciI6ImVmZmx1eCJ9.L7SkfnzmiVQ1vRboA1wvfqTsl-myYgwDMvsbEgoZ3AjyV2cxTWwNS9wuQpviOG6suFyMpBvTCCKIAk4CM9vbcw" --data '{"hosts":["69.43.208.0/20","64.19.87.0/24","64.19.84.0/23","64.19.82.0/23"],"ports":["top_100"],"fingerprint":2}' https://next.effluxio.com/api/v1/scans
+
+
+curl --header "Content-Type: application/json" --header "Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIyN2U3YjE5Mi1hMmI2LTQ3OTMtYTRiNy05M2I0YzEzYTY0ZDEiLCJJc3N1ZWRBdCI6IjIwMjItMDUtMTMgMTg6Mzk6NTIuODc2OTA2MDA2ICswMDAwIFVUQyIsIklzc3VlciI6ImVmZmx1eCJ9.L7SkfnzmiVQ1vRboA1wvfqTsl-myYgwDMvsbEgoZ3AjyV2cxTWwNS9wuQpviOG6suFyMpBvTCCKIAk4CM9vbcw" --data '{"hosts":["198.90.116.102"],"ports":["3389"],"fingerprint":2}' https://api.effluxio.com/api/v1/scans
+
+
+ curl --header "Content-Type: application/json" --header "Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIyN2U3YjE5Mi1hMmI2LTQ3OTMtYTRiNy05M2I0YzEzYTY0ZDEiLCJJc3N1ZWRBdCI6IjIwMjItMDUtMTMgMTg6Mzk6NTIuODc2OTA2MDA2ICswMDAwIFVUQyIsIklzc3VlciI6ImVmZmx1eCJ9.L7SkfnzmiVQ1vRboA1wvfqTsl-myYgwDMvsbEgoZ3AjyV2cxTWwNS9wuQpviOG6suFyMpBvTCCKIAk4CM9vbcw" https://api.effluxio.com/api/v1/scans/43fc484e-8ef7-4fa3-be86-9c103696a0e3
+
+ https://github.com/CVE-2008-0166/openssl_blocklists
+
+
+ curl --header "Content-Type: application/json" --header "Authorization: Bearer API_TOKEN" --data '{"hosts":["IP"],"ports":["3389"],"fingerprint":2}' https://api.effluxio.com/api/v1/scans
