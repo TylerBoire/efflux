@@ -1,0 +1,2683 @@
+{
+    "schemes": ["https"],
+    "consumes": [
+        "application/json"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "Efflux Scan API",
+        "title": "Efflux Scan API",
+        "contact": {
+            "name": "Efflux",
+            "url": "http://www.efflux.io",
+            "email": "data@effluxio.com"
+        },
+        "version": "2.0"
+    },
+    "host": "api.effluxio.com",
+    "basePath": "/api/v2",
+    "paths": {
+        "/lists/hosts": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "summary": "Get Host Lists",
+                "responses": {
+                    "200": {
+                        "description": "Found Host Lists",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/HostList"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "No Host Lists found",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Created lists can be used in scans, schedules, and other host lists\n\nFor example, with the following two lists created:\n{\"name\":\"my_list_1\",\"description\":\"some hosts\",\"hosts\":[\"1.2.3.4\",\"2.3.4.5\"],\"host_count\":2}\n{\"name\":\"my_list_2\",\"description\":\"some other hosts\",\"hosts\":[\"3.4.5.6\",\"4.5.6.7\"],\"host_count\":2}\n\nYou can create a new list by referring to those lists by name.\n\n'{\"name\":\"my_full_list\",\"description\":\"all my ssh hosts\",\"hosts\":[\"my_list_1\", \"my_list_2\"]}'\n\nResult:\n{\"name\":\"my_full_list\",\"description\":\"all my ssh hosts\",\"hosts\":[\"1.2.3.4\",\"2.3.4.5\",\"3.4.5.6\",\"4.5.6.7\"],\"host_count\":4}\n\nLinks to the source lists are not maintained, so any later changes to the two source lists will not reflect in my_full_list.\nYou can update my_full_list after altering the 'my_list_1' and 'my_list_2' lists to reflect those changes\n\nRESTRICTIONS: \tValid characters are: [a-zA-Z0-9_] host lists cannot contain hyphens, spaces will be replaced with underscore(_)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Create a new Host List",
+                "parameters": [
+                    {
+                        "description": "Host List details",
+                        "name": "host_list",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/NewHostList"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List created",
+                        "schema": {
+                            "$ref": "#/definitions/HostList"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid message body",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "409": {
+                        "description": "List already exists",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to Create"
+                    }
+                }
+            }
+        },
+        "/lists/hosts/{list_id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "summary": "Get Host Lists by name",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "List ID",
+                        "name": "list_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Host List Found",
+                        "schema": {
+                            "$ref": "#/definitions/HostList"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "List Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Update a Host List",
+                "parameters": [
+                    {
+                        "description": "Host List details to change",
+                        "name": "host_list",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/NewHostList"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "List ID",
+                        "name": "list_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Host List Updated",
+                        "schema": {
+                            "$ref": "#/definitions/HostList"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "List Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "summary": "Delete a Host List",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "List ID",
+                        "name": "list_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "List deleted",
+                        "schema": {
+                            "$ref": "#/definitions/HostList"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "List not found",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/lists/ports": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "summary": "Get Port Lists",
+                "responses": {
+                    "200": {
+                        "description": "Found Port Lists",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/PortList"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "No Port Lists found",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Created lists can be used in scans, schedules, and other port lists\n\nFor example, with the following two lists created:\n{\"name\":\"ssh_basic_list\",\"description\":\"common ssh ports\",\"ports\":\"22,222,2222\",\"port_count\":3}\n{\"name\":\"ssh_alt_list\",\"description\":\"extra ssh ports\",\"ports\":\"223,2223,2323,22223\",\"port_count\":4}\n\nYou can create a new list by referring to those lists by name.\n\n'{\"name\":\"ssh_full_list\",\"description\":\"all my ssh ports\",\"ports\":[\"ssh_basic_list\", \"ssh_alt_list\"]}'\n\nResult:\n{\"name\":\"ssh_full_list\",\"description\":\"all my ssh ports\",\"ports\":\"22,222-223,2222-2223,2323,22223\",\"port_count\":7}\n\nLinks to the source lists are not maintained, so any later changes to the two source lists will not reflect in ssh_full_list.\nYou can update ssh_full_list after altering the 'basic' and 'alt' lists to reflect those changes\n\nRESTRICTIONS: \tValid characters are: [a-zA-Z0-9_] port lists cannot  or begin with 'top_' to avoid interfering with top_# lists.\nNo hyphens, spaces will be replaced with underscore(_)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Create a new Port List",
+                "parameters": [
+                    {
+                        "description": "Port List details",
+                        "name": "port_list",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/NewPortList"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List created",
+                        "schema": {
+                            "$ref": "#/definitions/PortList"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid message body",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "409": {
+                        "description": "List already exists",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to Create"
+                    }
+                }
+            }
+        },
+        "/lists/ports/{list_id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "summary": "Get Port Lists by id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "List ID",
+                        "name": "list_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Port List Found",
+                        "schema": {
+                            "$ref": "#/definitions/PortList"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "List Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Update a Port List",
+                "parameters": [
+                    {
+                        "description": "Port List details including name",
+                        "name": "port_list",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/NewPortList"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "List ID",
+                        "name": "list_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Port List Updated",
+                        "schema": {
+                            "$ref": "#/definitions/PortList"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "List Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "summary": "Delete a Port List",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "List ID",
+                        "name": "list_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "List deleted"
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "List not found",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/ports/tcp/{count}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "summary": "Get top_# TCP port lists",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "top port count",
+                        "name": "count",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "return ports in order (unjoined)",
+                        "name": "ordered",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Top Ports list found",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid count specified",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/ports/udp/{count}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "summary": "Get top_# UDP port lists",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "top port count",
+                        "name": "count",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "return ports in order (unjoined)",
+                        "name": "ordered",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Top Ports list found",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid count specified",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/scans": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "summary": "Get user scans",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "count to return, default 10",
+                        "name": "count",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Found Jobs",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Job"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "No Jobs found",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "define the parameters of your scan\n\nhosts:\n\n\"1.2.3.4/32\" \t\tsingle (also ok without '/32')\n\"1.2.4.1/24\" \t\tblock\n\"1.2.5.1-1.2.5.19\"\trange\n\"my_custom_list\"\tcustom user list\n\nports:\n\"443\"\n\"20-22\"\t\t\t\trange\n\"top_10\"\t\t\ttop_# use any number up to 10,000\n\"my_custom_list\"\tcustom user list\n\nfingerprint:\n0/omitted\t\t\tJust check if open - no fingerprinting attempts (fastest)\n1\t\t\t\t\tEvaluate any banners sent upon connection\n2\t\t\t\t\tSend probes to identify service if needed (possible multiple connections, slowest)\n\nproto:\n\"tcp\"\n\"udp\"\n\ncollect:\n\"collect:{\"ssh\":[\"222\",\"my_custom_ssh_port_list\"],\"rdp\":[\"33389\",\"my_custom_rdp_port_list\"]}\ncollect bypasses fingerprinting and immediately attempts to collect on the given service if any the present ports are found open",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Request a scan",
+                "parameters": [
+                    {
+                        "description": "Hosts and Ports to be scanned",
+                        "name": "message",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Request"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Job created",
+                        "schema": {
+                            "$ref": "#/definitions/RequestResults"
+                        }
+                    },
+                    "400": {
+                        "description": "No valid ports",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to create Job"
+                    }
+                }
+            }
+        },
+        "/scans/eval": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "summary": "Have a scan request be evaluated without executing",
+                "parameters": [
+                    {
+                        "description": "Hosts and Ports to be scanned",
+                        "name": "message",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Request"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Job evaluated",
+                        "schema": {
+                            "$ref": "#/definitions/RequestResults"
+                        }
+                    },
+                    "400": {
+                        "description": "No valid ports",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to Create"
+                    }
+                }
+            }
+        },
+        "/scans/{job_id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get job results by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Job ID",
+                        "name": "job_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "include hosts, ports, and returned byte data",
+                        "name": "details",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Job Found",
+                        "schema": {
+                            "$ref": "#/definitions/empire_JobReport"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Job Not Found"
+                    }
+                }
+            }
+        },
+        "/scans/{job_id}/repeat": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Request a job be repeated",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Job ID",
+                        "name": "job_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Job created",
+                        "schema": {
+                            "$ref": "#/definitions/RequestResults"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to Create"
+                    }
+                }
+            }
+        },
+        "/schedules": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "summary": "Get user schedules",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "count to return, default 10",
+                        "name": "count",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Schedules Found",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Schedule"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Schedules Not Found"
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "define how often and when you want your scan to occur\n\nfrequency:\n'5m', '10m', '2h', '1d', '1w'\nvalid intervals:\n'm'(minute), 'h'(hour), 'd'(day)', 'w'(week)\noptions:\nif interval = m (5,10,15,20,30)\nif interval = h (1,2,3,4,6,8,12)\nif interval = d/w (1)\n\nday:\nonly if interval = w, (0[Sunday]-6[Saturday]) default 0\n\nhour:\nonly if interval = d/w, (0-23) default 0 all times GMT/UCT/ZULU\n\nhosts:\nsame as scan request (custom lists supported)\n\nports:\nsame as scan request (top_# lists and custom lists supported)\n\nproto:\n\"tcp\"(default) or \"udp\"\n\nas with scans, request count = host count * port count\nmax request counts depend on the frequency:\n\"m\": 1,000 per minute interval in the frequency (5m = 5,000)\n\"h\": 100,000 per hour interval in the frequency (2h = 200,000)\n\"d\": 1,000,000 per day\n\"w\": 10,000,000 per week\n\nExamples:\n'{\"frequency\":30m,\"hosts\":\"1.2.3.4/28\",\"ports\":\"top_1000\"}'\n'{\"frequency\":1h,\"hosts\":\"1.2.3.4/23\",\"ports\":\"top_100\"}'\n'{\"frequency\":6h,\"hosts\":\"1.2.3.4/21\",\"ports\":\"top_1000\"}'\n'{\"frequency\":1d,\"hour\":16,\"hosts\":\"1.2.3.4/16\",\"ports\":\"top_1000\"}'\n'{\"frequency\":1w,\"day\":2,\"hour\":12,\"hosts\":\"1.2.3.4/16\",\"ports\":\"top_1000\"}'",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Create a new schedule",
+                "parameters": [
+                    {
+                        "description": "Schedule Info",
+                        "name": "message",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/NewSchedule"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Schedule Created",
+                        "schema": {
+                            "$ref": "#/definitions/Schedule"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to Create"
+                    }
+                }
+            }
+        },
+        "/schedules/addlists/{schedule_id}": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Add the listed Host or Port Lists to the schedule",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Add Host Lists or Port Lists to a schedule",
+                "parameters": [
+                    {
+                        "description": "Schedule Info",
+                        "name": "message",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/NewSchedule"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Schedule Modified",
+                        "schema": {
+                            "$ref": "#/definitions/Schedule"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to Modify"
+                    }
+                }
+            }
+        },
+        "/schedules/history/{schedule_id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "summary": "Get past jobs of a schedule",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "schedule id",
+                        "name": "schedule_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "count to return, default 10",
+                        "name": "count",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Jobs found",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Job"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "jobs not found",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/schedules/removelists/{schedule_id}": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Remove the provided Host Lists and/or Port Lists from the schedule",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Remove Host or Port Lists to a schedule",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Schedule ID",
+                        "name": "schedule_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Schedule Info",
+                        "name": "message",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/NewSchedule"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Schedule Modified",
+                        "schema": {
+                            "$ref": "#/definitions/Schedule"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to Modify"
+                    }
+                }
+            }
+        },
+        "/schedules/{schedule_id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get schedules by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Schedule ID",
+                        "name": "schedule_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Schedule Found",
+                        "schema": {
+                            "$ref": "#/definitions/Schedule"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Schedule Not Found"
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Add the listed Host or Port Lists to the schedule",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Add Host Lists or Port Lists to a schedule",
+                "parameters": [
+                    {
+                        "description": "Schedule Info",
+                        "name": "message",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/NewSchedule"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Schedule Modified",
+                        "schema": {
+                            "$ref": "#/definitions/Schedule"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to Modify"
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "summary": "Delete a Schedule",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Schedule ID",
+                        "name": "schedule_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Schedule Deleted"
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "List not found",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/search/{host}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get scan results by IP",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "search host",
+                        "name": "host",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Host Found",
+                        "schema": {
+                            "$ref": "#/definitions/empire_HostStatus"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Host Not Found"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "empire_AppDetectURLSet": {
+            "type": "object",
+            "properties": {
+                "url": {
+                    "type": "string",
+                    "x-order": "00"
+                },
+                "detections": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/empire_AppDetection"
+                    },
+                    "x-order": "01"
+                }
+            }
+        },
+        "empire_AppDetection": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "x-order": "00"
+                },
+                "matches": {
+                    "type": "string",
+                    "x-order": "01"
+                },
+                "version": {
+                    "type": "string",
+                    "x-order": "02"
+                },
+                "url": {
+                    "type": "string",
+                    "x-order": "03"
+                }
+            }
+        },
+        "empire_BACnetCollector": {
+            "type": "object",
+            "properties": {
+                "instance_number": {
+                    "type": "integer",
+                    "x-order": "00"
+                },
+                "vendor_id": {
+                    "type": "integer",
+                    "x-order": "01"
+                },
+                "vendor_name": {
+                    "type": "string",
+                    "x-order": "02"
+                },
+                "firmware_revision": {
+                    "type": "string",
+                    "x-order": "03"
+                },
+                "software_revision": {
+                    "type": "string",
+                    "x-order": "04"
+                },
+                "object_name": {
+                    "type": "string",
+                    "x-order": "05"
+                },
+                "model_name": {
+                    "type": "string",
+                    "x-order": "06"
+                },
+                "description": {
+                    "type": "string",
+                    "x-order": "07"
+                },
+                "location": {
+                    "type": "string",
+                    "x-order": "08"
+                }
+            }
+        },
+        "empire_CheckResult": {
+            "type": "object",
+            "properties": {
+                "matched": {
+                    "type": "string",
+                    "x-order": "00"
+                },
+                "check_name": {
+                    "type": "string",
+                    "x-order": "01"
+                },
+                "check_type": {
+                    "type": "string",
+                    "x-order": "02"
+                },
+                "severity": {
+                    "type": "string",
+                    "x-order": "03"
+                },
+                "extract_name": {
+                    "type": "string",
+                    "x-order": "04"
+                },
+                "extractions": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-order": "05"
+                },
+                "cve_id": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-order": "06"
+                },
+                "cwe_id": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-order": "07"
+                },
+                "cvss_metrics": {
+                    "type": "string",
+                    "x-order": "08"
+                },
+                "cvss_score": {
+                    "type": "number",
+                    "x-order": "09"
+                }
+            }
+        },
+        "empire_FoxCollector": {
+            "type": "object",
+            "properties": {
+                "server_id": {
+                    "type": "integer",
+                    "x-order": "00"
+                },
+                "version": {
+                    "type": "string",
+                    "x-order": "01"
+                },
+                "host_name": {
+                    "type": "string",
+                    "x-order": "02"
+                },
+                "host_address": {
+                    "type": "string",
+                    "x-order": "03"
+                },
+                "app_name": {
+                    "type": "string",
+                    "x-order": "04"
+                },
+                "app_version": {
+                    "type": "string",
+                    "x-order": "05"
+                },
+                "vm_name": {
+                    "type": "string",
+                    "x-order": "06"
+                },
+                "vm_version": {
+                    "type": "string",
+                    "x-order": "07"
+                },
+                "os_name": {
+                    "type": "string",
+                    "x-order": "08"
+                },
+                "os_version": {
+                    "type": "string",
+                    "x-order": "09"
+                },
+                "station_name": {
+                    "type": "string",
+                    "x-order": "10"
+                },
+                "language": {
+                    "type": "string",
+                    "x-order": "11"
+                },
+                "time_zone": {
+                    "type": "string",
+                    "x-order": "12"
+                },
+                "host_id": {
+                    "type": "string",
+                    "x-order": "13"
+                },
+                "vm_id": {
+                    "type": "string",
+                    "x-order": "14"
+                },
+                "brand_id": {
+                    "type": "string",
+                    "x-order": "15"
+                },
+                "sys_info": {
+                    "type": "string",
+                    "x-order": "16"
+                },
+                "auth_agent_type": {
+                    "type": "string",
+                    "x-order": "17"
+                }
+            }
+        },
+        "empire_HostMetadata": {
+            "type": "object",
+            "properties": {
+                "asn": {
+                    "type": "string",
+                    "x-order": "00"
+                },
+                "as_org": {
+                    "type": "string",
+                    "x-order": "01"
+                },
+                "country": {
+                    "type": "string",
+                    "x-order": "02"
+                },
+                "info": {
+                    "type": "string",
+                    "x-order": "03"
+                }
+            }
+        },
+        "empire_HostStatus": {
+            "type": "object",
+            "properties": {
+                "metadata": {
+                    "x-order": "00",
+                    "$ref": "#/definitions/empire_HostMetadata"
+                },
+                "ports": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "$ref": "#/definitions/empire_PortStatus"
+                    },
+                    "x-order": "01"
+                }
+            }
+        },
+        "empire_JobReport": {
+            "type": "object",
+            "properties": {
+                "job_id": {
+                    "type": "string",
+                    "x-order": "00"
+                },
+                "schedule_id": {
+                    "type": "string",
+                    "x-order": "01"
+                },
+                "proto": {
+                    "type": "string",
+                    "x-order": "02"
+                },
+                "hosts": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-order": "03"
+                },
+                "host_lists": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-order": "04"
+                },
+                "ports": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-order": "05"
+                },
+                "port_lists": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-order": "06"
+                },
+                "host_count": {
+                    "type": "integer",
+                    "x-order": "07"
+                },
+                "port_count": {
+                    "type": "integer",
+                    "x-order": "08"
+                },
+                "request_count": {
+                    "type": "integer",
+                    "x-order": "09"
+                },
+                "fingerprint": {
+                    "type": "integer",
+                    "x-order": "10"
+                },
+                "created_at": {
+                    "type": "string",
+                    "x-order": "11"
+                },
+                "started_at": {
+                    "type": "string",
+                    "x-order": "12"
+                },
+                "completed_at": {
+                    "type": "string",
+                    "x-order": "13"
+                },
+                "accessible_host_count": {
+                    "type": "integer",
+                    "x-order": "14"
+                },
+                "accessible_port_count": {
+                    "type": "integer",
+                    "x-order": "15"
+                },
+                "status": {
+                    "type": "string",
+                    "x-order": "16"
+                },
+                "results": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "$ref": "#/definitions/empire_HostStatus"
+                    },
+                    "x-order": "17"
+                }
+            }
+        },
+        "empire_PortStatus": {
+            "type": "object",
+            "properties": {
+                "open": {
+                    "type": "boolean",
+                    "x-order": "00"
+                },
+                "service": {
+                    "type": "string",
+                    "x-order": "01"
+                },
+                "software": {
+                    "type": "string",
+                    "x-order": "02"
+                },
+                "version": {
+                    "type": "string",
+                    "x-order": "03"
+                },
+                "info": {
+                    "type": "string",
+                    "x-order": "04"
+                },
+                "host_name": {
+                    "type": "string",
+                    "x-order": "05"
+                },
+                "os": {
+                    "type": "string",
+                    "x-order": "06"
+                },
+                "device_type": {
+                    "type": "string",
+                    "x-order": "07"
+                },
+                "cpe": {
+                    "type": "string",
+                    "x-order": "08"
+                },
+                "tls": {
+                    "type": "boolean",
+                    "x-order": "09"
+                },
+                "http": {
+                    "type": "boolean",
+                    "x-order": "10"
+                },
+                "bacnet_collection": {
+                    "x-order": "11",
+                    "$ref": "#/definitions/empire_BACnetCollector"
+                },
+                "fox_collection": {
+                    "x-order": "12",
+                    "$ref": "#/definitions/empire_FoxCollector"
+                },
+                "rdp_collection": {
+                    "x-order": "13",
+                    "$ref": "#/definitions/empire_RDPCollector"
+                },
+                "sip_collection": {
+                    "x-order": "14",
+                    "$ref": "#/definitions/empire_SIPCollector"
+                },
+                "s7_collection": {
+                    "x-order": "15",
+                    "$ref": "#/definitions/empire_S7Collector"
+                },
+                "smb_collection": {
+                    "x-order": "16",
+                    "$ref": "#/definitions/empire_SMBCollector"
+                },
+                "ssh_collection": {
+                    "x-order": "17",
+                    "$ref": "#/definitions/empire_SSHCollector"
+                },
+                "telnet_collection": {
+                    "x-order": "18",
+                    "$ref": "#/definitions/empire_TelnetCollector"
+                },
+                "app_detections": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/empire_AppDetectURLSet"
+                    },
+                    "x-order": "19"
+                },
+                "checks": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/empire_CheckResult"
+                    },
+                    "x-order": "20"
+                },
+                "bytes_rcvd": {
+                    "type": "integer",
+                    "x-order": "21"
+                },
+                "raw": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-order": "22"
+                }
+            }
+        },
+        "empire_RDPCollector": {
+            "type": "object",
+            "properties": {
+                "target_name": {
+                    "type": "string",
+                    "x-order": "00"
+                },
+                "proto_rdp": {
+                    "type": "boolean",
+                    "x-order": "01"
+                },
+                "proto_ssl": {
+                    "type": "boolean",
+                    "x-order": "02"
+                },
+                "proto_hybrid": {
+                    "type": "boolean",
+                    "x-order": "03"
+                },
+                "proto_rdstls": {
+                    "type": "boolean",
+                    "x-order": "04"
+                },
+                "proto_hybrid_ex": {
+                    "type": "boolean",
+                    "x-order": "05"
+                },
+                "cert_signature": {
+                    "type": "string",
+                    "x-order": "06"
+                },
+                "cert_version": {
+                    "type": "string",
+                    "x-order": "07"
+                },
+                "cert_serial_number": {
+                    "type": "string",
+                    "x-order": "08"
+                },
+                "cert_not_before": {
+                    "type": "string",
+                    "x-order": "09"
+                },
+                "cert_not_after": {
+                    "type": "string",
+                    "x-order": "10"
+                },
+                "cert_issuer_country": {
+                    "type": "string",
+                    "x-order": "11"
+                },
+                "cert_issuer_organization": {
+                    "type": "string",
+                    "x-order": "12"
+                },
+                "cert_issuer_organizational_unit": {
+                    "type": "string",
+                    "x-order": "13"
+                },
+                "cert_issuer_locality": {
+                    "type": "string",
+                    "x-order": "14"
+                },
+                "cert_issuer_province": {
+                    "type": "string",
+                    "x-order": "15"
+                },
+                "cert_issuer_street_address": {
+                    "type": "string",
+                    "x-order": "16"
+                },
+                "cert_issuer_postal_code": {
+                    "type": "string",
+                    "x-order": "17"
+                },
+                "cert_issuer_serial_number": {
+                    "type": "string",
+                    "x-order": "18"
+                },
+                "cert_issuer_common_name": {
+                    "type": "string",
+                    "x-order": "19"
+                },
+                "cert_subject_country": {
+                    "type": "string",
+                    "x-order": "20"
+                },
+                "cert_subject_organization": {
+                    "type": "string",
+                    "x-order": "21"
+                },
+                "cert_subject_organizational_unit": {
+                    "type": "string",
+                    "x-order": "22"
+                },
+                "cert_subject_locality": {
+                    "type": "string",
+                    "x-order": "23"
+                },
+                "cert_subject_province": {
+                    "type": "string",
+                    "x-order": "24"
+                },
+                "cert_subject_street_address": {
+                    "type": "string",
+                    "x-order": "25"
+                },
+                "cert_subject_postal_code": {
+                    "type": "string",
+                    "x-order": "26"
+                },
+                "cert_subject_serial_number": {
+                    "type": "string",
+                    "x-order": "27"
+                },
+                "cert_subject_common_name": {
+                    "type": "string",
+                    "x-order": "28"
+                },
+                "net_bios_domain_name": {
+                    "type": "string",
+                    "x-order": "29"
+                },
+                "net_bios_computer_name": {
+                    "type": "string",
+                    "x-order": "30"
+                },
+                "dns_domain_name": {
+                    "type": "string",
+                    "x-order": "31"
+                },
+                "dns_computer_name": {
+                    "type": "string",
+                    "x-order": "32"
+                },
+                "major": {
+                    "type": "integer",
+                    "x-order": "33"
+                },
+                "minor": {
+                    "type": "integer",
+                    "x-order": "34"
+                },
+                "build": {
+                    "type": "integer",
+                    "x-order": "35"
+                },
+                "system_time": {
+                    "type": "string",
+                    "x-order": "36"
+                }
+            }
+        },
+        "empire_S7Collector": {
+            "type": "object",
+            "properties": {
+                "system": {
+                    "type": "string",
+                    "x-order": "00"
+                },
+                "module": {
+                    "type": "string",
+                    "x-order": "01"
+                },
+                "module_id": {
+                    "type": "string",
+                    "x-order": "02"
+                },
+                "module_type": {
+                    "type": "string",
+                    "x-order": "03"
+                },
+                "cpu_profile": {
+                    "type": "string",
+                    "x-order": "04"
+                },
+                "hardware": {
+                    "type": "string",
+                    "x-order": "05"
+                },
+                "firmware": {
+                    "type": "string",
+                    "x-order": "06"
+                },
+                "plant_id": {
+                    "type": "string",
+                    "x-order": "07"
+                },
+                "oem_id": {
+                    "type": "string",
+                    "x-order": "08"
+                },
+                "memory_serial_number": {
+                    "type": "string",
+                    "x-order": "09"
+                },
+                "copyright": {
+                    "type": "string",
+                    "x-order": "10"
+                },
+                "serial_number": {
+                    "type": "string",
+                    "x-order": "11"
+                },
+                "location": {
+                    "type": "string",
+                    "x-order": "12"
+                },
+                "os": {
+                    "type": "string",
+                    "x-order": "13"
+                }
+            }
+        },
+        "empire_SIPCollector": {
+            "type": "object",
+            "properties": {
+                "response": {
+                    "type": "string",
+                    "x-order": "00"
+                },
+                "accept": {
+                    "type": "string",
+                    "x-order": "01"
+                },
+                "accept_encoding": {
+                    "type": "string",
+                    "x-order": "02"
+                },
+                "accept_language": {
+                    "type": "string",
+                    "x-order": "03"
+                },
+                "allow": {
+                    "type": "string",
+                    "x-order": "04"
+                },
+                "allow_events": {
+                    "type": "string",
+                    "x-order": "05"
+                },
+                "contact": {
+                    "type": "string",
+                    "x-order": "06"
+                },
+                "content_encoding": {
+                    "type": "string",
+                    "x-order": "07"
+                },
+                "content_language": {
+                    "type": "string",
+                    "x-order": "08"
+                },
+                "content_type": {
+                    "type": "string",
+                    "x-order": "09"
+                },
+                "proxy_authenticate": {
+                    "type": "string",
+                    "x-order": "10"
+                },
+                "session_id": {
+                    "type": "string",
+                    "x-order": "11"
+                },
+                "subject": {
+                    "type": "string",
+                    "x-order": "12"
+                },
+                "supported": {
+                    "type": "string",
+                    "x-order": "13"
+                },
+                "user_agent": {
+                    "type": "string",
+                    "x-order": "14"
+                },
+                "via": {
+                    "type": "string",
+                    "x-order": "15"
+                },
+                "warning": {
+                    "type": "string",
+                    "x-order": "16"
+                },
+                "sdp_version": {
+                    "type": "string",
+                    "x-order": "17"
+                },
+                "sdp_owner": {
+                    "type": "string",
+                    "x-order": "18"
+                },
+                "sdp_name": {
+                    "type": "string",
+                    "x-order": "19"
+                },
+                "sdp_information": {
+                    "type": "string",
+                    "x-order": "20"
+                },
+                "sdp_uri": {
+                    "type": "string",
+                    "x-order": "21"
+                },
+                "sdp_email": {
+                    "type": "string",
+                    "x-order": "22"
+                },
+                "sdp_phone": {
+                    "type": "string",
+                    "x-order": "23"
+                },
+                "sdp_connection": {
+                    "type": "string",
+                    "x-order": "24"
+                },
+                "sdp_bandwidth": {
+                    "type": "string",
+                    "x-order": "25"
+                },
+                "sdp_timezone": {
+                    "type": "string",
+                    "x-order": "26"
+                },
+                "sdp_encryption_key": {
+                    "type": "string",
+                    "x-order": "27"
+                },
+                "sdp_attributes": {
+                    "type": "string",
+                    "x-order": "28"
+                },
+                "raw": {
+                    "type": "string",
+                    "x-order": "29"
+                }
+            }
+        },
+        "empire_SMBCollector": {
+            "type": "object",
+            "properties": {
+                "major": {
+                    "type": "integer",
+                    "x-order": "00"
+                },
+                "minor": {
+                    "type": "integer",
+                    "x-order": "01"
+                },
+                "revision": {
+                    "type": "integer",
+                    "x-order": "02"
+                },
+                "version_string": {
+                    "type": "string",
+                    "x-order": "03"
+                },
+                "native_os": {
+                    "type": "string",
+                    "x-order": "04"
+                },
+                "has_ntlm": {
+                    "type": "boolean",
+                    "x-order": "05"
+                },
+                "ntlm": {
+                    "type": "string",
+                    "x-order": "06"
+                },
+                "group_name": {
+                    "type": "string",
+                    "x-order": "07"
+                },
+                "smbv1_support": {
+                    "type": "boolean",
+                    "x-order": "08"
+                },
+                "smb_dfs_support": {
+                    "type": "boolean",
+                    "x-order": "09"
+                },
+                "smb_leasing_support": {
+                    "type": "boolean",
+                    "x-order": "10"
+                },
+                "smb_multicredit_support": {
+                    "type": "boolean",
+                    "x-order": "11"
+                },
+                "smb_multichan_support": {
+                    "type": "boolean",
+                    "x-order": "12"
+                },
+                "smb_persistent_handle_support": {
+                    "type": "boolean",
+                    "x-order": "13"
+                },
+                "smb_directory_leasing_support": {
+                    "type": "boolean",
+                    "x-order": "14"
+                },
+                "smb_encryption_support": {
+                    "type": "boolean",
+                    "x-order": "15"
+                },
+                "neg_protocol_id": {
+                    "type": "string",
+                    "x-order": "16"
+                },
+                "neg_status": {
+                    "type": "integer",
+                    "x-order": "17"
+                },
+                "neg_command": {
+                    "type": "integer",
+                    "x-order": "18"
+                },
+                "neg_credits": {
+                    "type": "integer",
+                    "x-order": "19"
+                },
+                "neg_flags": {
+                    "type": "integer",
+                    "x-order": "20"
+                },
+                "neg_security_mode": {
+                    "type": "integer",
+                    "x-order": "21"
+                },
+                "neg_dialect_revision": {
+                    "type": "integer",
+                    "x-order": "22"
+                },
+                "neg_server_guid": {
+                    "type": "string",
+                    "x-order": "23"
+                },
+                "neg_capabilities": {
+                    "type": "integer",
+                    "x-order": "24"
+                },
+                "neg_system_time": {
+                    "type": "integer",
+                    "x-order": "25"
+                },
+                "neg_server_start_time": {
+                    "type": "integer",
+                    "x-order": "26"
+                },
+                "neg_authentication_types": {
+                    "type": "string",
+                    "x-order": "27"
+                },
+                "session_protocol_id": {
+                    "type": "string",
+                    "x-order": "28"
+                },
+                "session_status": {
+                    "type": "integer",
+                    "x-order": "29"
+                },
+                "session_command": {
+                    "type": "integer",
+                    "x-order": "30"
+                },
+                "session_credits": {
+                    "type": "integer",
+                    "x-order": "31"
+                },
+                "session_flags": {
+                    "type": "integer",
+                    "x-order": "32"
+                },
+                "session_setup_flags": {
+                    "type": "integer",
+                    "x-order": "33"
+                },
+                "session_target_name": {
+                    "type": "string",
+                    "x-order": "34"
+                },
+                "session_negotiate_flags": {
+                    "type": "integer",
+                    "x-order": "35"
+                }
+            }
+        },
+        "empire_SSHCollector": {
+            "type": "object",
+            "properties": {
+                "version": {
+                    "type": "string",
+                    "x-order": "00"
+                },
+                "software": {
+                    "type": "string",
+                    "x-order": "01"
+                },
+                "misc": {
+                    "type": "string",
+                    "x-order": "02"
+                },
+                "pub_key": {
+                    "type": "string",
+                    "x-order": "03"
+                },
+                "pub_key_type": {
+                    "type": "string",
+                    "x-order": "04"
+                },
+                "kex_algs": {
+                    "type": "string",
+                    "x-order": "05"
+                },
+                "ciphers": {
+                    "type": "string",
+                    "x-order": "06"
+                },
+                "compression": {
+                    "type": "string",
+                    "x-order": "07"
+                },
+                "macs": {
+                    "type": "string",
+                    "x-order": "08"
+                },
+                "methods": {
+                    "type": "string",
+                    "x-order": "09"
+                },
+                "banner": {
+                    "type": "string",
+                    "x-order": "10"
+                },
+                "raw": {
+                    "type": "string",
+                    "x-order": "11"
+                }
+            }
+        },
+        "empire_TelnetCollector": {
+            "type": "object",
+            "properties": {
+                "banner": {
+                    "type": "string",
+                    "x-order": "00"
+                },
+                "do": {
+                    "type": "string",
+                    "x-order": "01"
+                },
+                "will": {
+                    "type": "string",
+                    "x-order": "02"
+                },
+                "wont": {
+                    "type": "string",
+                    "x-order": "03"
+                },
+                "dont": {
+                    "type": "string",
+                    "x-order": "04"
+                }
+            }
+        },
+        "HostList": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "x-order": "00"
+                },
+                "description": {
+                    "type": "string",
+                    "x-order": "01"
+                },
+                "hosts": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-order": "02"
+                },
+                "host_count": {
+                    "type": "integer",
+                    "x-order": "03"
+                },
+                "list_id": {
+                    "type": "string",
+                    "x-order": "04"
+                },
+                "version": {
+                    "type": "integer",
+                    "x-order": "05"
+                },
+                "schedules": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Schedule"
+                    },
+                    "x-order": "05"
+                },
+                "created_at": {
+                    "type": "string",
+                    "x-order": "07"
+                },
+                "updated_at": {
+                    "type": "string",
+                    "x-order": "08"
+                }
+            }
+        },
+        "Job": {
+            "type": "object",
+            "properties": {
+                "job_id": {
+                    "type": "string",
+                    "x-order": "00"
+                },
+                "proto": {
+                    "type": "string",
+                    "x-order": "01"
+                },
+                "hosts": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-order": "02"
+                },
+                "host_lists": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-order": "03"
+                },
+                "ports": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-order": "04"
+                },
+                "port_lists": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-order": "05"
+                },
+                "host_count": {
+                    "type": "integer",
+                    "x-order": "06"
+                },
+                "port_count": {
+                    "type": "integer",
+                    "x-order": "07"
+                },
+                "request_count": {
+                    "type": "integer",
+                    "x-order": "08"
+                },
+                "fingerprint": {
+                    "type": "integer",
+                    "x-order": "09"
+                },
+                "schedule_id": {
+                    "type": "string",
+                    "x-order": "10"
+                },
+                "created_at": {
+                    "type": "string",
+                    "x-order": "11"
+                },
+                "started_at": {
+                    "type": "string",
+                    "x-order": "12"
+                },
+                "canceled_at": {
+                    "type": "string",
+                    "x-order": "13"
+                },
+                "completed_at": {
+                    "type": "string",
+                    "x-order": "14"
+                },
+                "accessible_host_count": {
+                    "type": "integer",
+                    "x-order": "15"
+                },
+                "accessible_port_count": {
+                    "type": "integer",
+                    "x-order": "16"
+                },
+                "status": {
+                    "type": "string",
+                    "x-order": "17"
+                }
+            }
+        },
+        "NewHostList": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "x-order": "00"
+                },
+                "description": {
+                    "type": "string",
+                    "x-order": "01"
+                },
+                "hosts": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-order": "02"
+                }
+            }
+        },
+        "NewPortList": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "x-order": "00"
+                },
+                "description": {
+                    "type": "string",
+                    "x-order": "01"
+                },
+                "ports": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-order": "02"
+                },
+                "proto": {
+                    "type": "string",
+                    "x-order": "03"
+                }
+            }
+        },
+        "NewSchedule": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "x-order": "00"
+                },
+                "description": {
+                    "type": "string",
+                    "x-order": "01"
+                },
+                "frequency": {
+                    "description": "1m, 5m, 1h, 12h, 1d, 7d, 1w, etc",
+                    "type": "string",
+                    "x-order": "02"
+                },
+                "day": {
+                    "description": "0-6",
+                    "type": "integer",
+                    "x-order": "03"
+                },
+                "hour": {
+                    "description": "0-23",
+                    "type": "integer",
+                    "x-order": "04"
+                },
+                "hosts": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-order": "05"
+                },
+                "host_lists": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-order": "06"
+                },
+                "ports": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-order": "07"
+                },
+                "port_lists": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-order": "08"
+                },
+                "proto": {
+                    "type": "string",
+                    "x-order": "09"
+                },
+                "fingerprint": {
+                    "type": "integer",
+                    "x-order": "10"
+                }
+            }
+        },
+        "PortList": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "x-order": "00"
+                },
+                "description": {
+                    "type": "string",
+                    "x-order": "01"
+                },
+                "ports": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-order": "02"
+                },
+                "port_count": {
+                    "type": "integer",
+                    "x-order": "03"
+                },
+                "proto": {
+                    "type": "string",
+                    "x-order": "04"
+                },
+                "list_id": {
+                    "type": "string",
+                    "x-order": "05"
+                },
+                "schedules": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Schedule"
+                    },
+                    "x-order": "06"
+                },
+                "version": {
+                    "type": "integer",
+                    "x-order": "06"
+                },
+                "created_at": {
+                    "type": "string",
+                    "x-order": "08"
+                },
+                "updated_at": {
+                    "type": "string",
+                    "x-order": "09"
+                }
+            }
+        },
+        "Schedule": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "x-order": "00"
+                },
+                "description": {
+                    "type": "string",
+                    "x-order": "01"
+                },
+                "frequency": {
+                    "type": "string",
+                    "x-order": "02"
+                },
+                "day": {
+                    "type": "integer",
+                    "x-order": "03"
+                },
+                "hour": {
+                    "type": "integer",
+                    "x-order": "04"
+                },
+                "hosts": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-order": "05"
+                },
+                "host_lists": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/HostList"
+                    },
+                    "x-order": "06"
+                },
+                "ports": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-order": "07"
+                },
+                "port_lists": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/PortList"
+                    },
+                    "x-order": "08"
+                },
+                "port_count": {
+                    "type": "integer",
+                    "x-order": "10"
+                },
+                "req_count": {
+                    "type": "integer",
+                    "x-order": "11"
+                },
+                "proto": {
+                    "type": "string",
+                    "x-order": "12"
+                },
+                "fingerprint": {
+                    "type": "integer",
+                    "x-order": "13"
+                },
+                "schedule_id": {
+                    "type": "string",
+                    "x-order": "14"
+                },
+                "host_count": {
+                    "type": "integer",
+                    "x-order": "9"
+                }
+            }
+        },
+        "Error": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "Request": {
+            "type": "object",
+            "required": [
+                "hosts",
+                "ports"
+            ],
+            "properties": {
+                "hosts": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-order": "00"
+                },
+                "ports": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-order": "01"
+                },
+                "proto": {
+                    "type": "string",
+                    "x-order": "02"
+                },
+                "fingerprint": {
+                    "type": "integer",
+                    "x-order": "03"
+                },
+                "collect": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "x-order": "04"
+                }
+            }
+        },
+        "RequestResults": {
+            "type": "object",
+            "required": [
+                "hosts",
+                "ports"
+            ],
+            "properties": {
+                "job_id": {
+                    "type": "string",
+                    "x-order": "00"
+                },
+                "hosts": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-order": "01"
+                },
+                "host_lists": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-order": "02"
+                },
+                "ports": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-order": "03"
+                },
+                "port_lists": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-order": "04"
+                },
+                "proto": {
+                    "type": "string",
+                    "x-order": "05"
+                },
+                "fingerprint": {
+                    "type": "integer",
+                    "x-order": "06"
+                },
+                "rejected_ips": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-order": "07"
+                },
+                "rejected_ports": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-order": "08"
+                },
+                "host_count": {
+                    "type": "integer",
+                    "x-order": "09"
+                },
+                "port_count": {
+                    "type": "integer",
+                    "x-order": "10"
+                },
+                "request_count": {
+                    "type": "integer",
+                    "x-order": "11"
+                },
+                "status": {
+                    "type": "string",
+                    "x-order": "12"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "description": "Your API key provided by Efflux",
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    }
+}
