@@ -41,28 +41,34 @@ class RestAdapter:
         try: 
             self._logger.debug(msg=log_line_pre)
             response = requests.Response(method=http_method, url=full_url, verify=self._ssl_verify, headers=headers, params=ep_params, json=data)
+
         except requests.exceptions.RequestException as e:
             self._logger.error(msg=(str(e)))
             raise EffluxApiException("Request Failed") from e
 
         try:
             data_out = response.json()
+
         except (ValueError, JSONDecodeError) as e:
             raise EffluxApiException("Bad JSON in response") from e
 
         is_success = 299 >= response.status_code >= 200
         log_line = log_line_post.format(is_success, response.status_code, response.reason)
+        
         if is_success:
             self._logger.debug(msg=log_line)
             return Result(response.status_code, message=response.reason, data=data_out)
         self._logger.error(msg=log_line)
         raise EffluxApiException(f"{response.status_code}: {response.reason}")
 
-    def get(self, endpoint: str, ep_params: Dict = None) -> Result:
+    def GET(self, endpoint: str, ep_params: Dict = None) -> Result:
         return self._do(http_method='GET', endpoint=endpoint, ep_params=ep_params)
 
-    def post(self, endpoint: str, ep_params: Dict = None, data: Dict = None) -> Result:
+    def POST(self, endpoint: str, ep_params: Dict = None, data: Dict = None) -> Result:
         return self._do(http_method='POST', endpoint=endpoint, ep_params=ep_params)
 
-    def delete(self, endpoint: str, ep_params: Dict = None, data: Dict = None) -> Result:
+    def PUT(self, endpoint: str, ep_params: Dict = None, data: Dict = None) -> Result:
+        return self._do(http_method='PUT', endpoint=endpoint, ep_params=ep_params)
+
+    def DELETE(self, endpoint: str, ep_params: Dict = None, data: Dict = None) -> Result:
         return self._do(http_method='DELETE', endpoint=endpoint, ep_params=ep_params)
