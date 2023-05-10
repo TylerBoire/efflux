@@ -22,7 +22,7 @@ class RestAdapter:
         
         self._logger = logger or logging.getLogger(__name__)
         self.url = "https://{}/{}/".format(hostname, ver)
-        self._api_key = api_key
+        self._api_key = f"Authorization: Bearer {self.Apikey}"
         self._ssl_verify = ssl_verify
         if not ssl_verify:
             requests.packages.urllib3.disable_warnings()
@@ -51,16 +51,16 @@ class RestAdapter:
 
         except (ValueError, JSONDecodeError) as e:
             raise EffluxApiException("Bad JSON in response") from e
-
+        
         is_success = 299 >= response.status_code >= 200
         log_line = log_line_post.format(is_success, response.status_code, response.reason)
-        
+
         if is_success:
             self._logger.debug(msg=log_line)
             return Result(response.status_code, message=response.reason, data=data_out)
         self._logger.error(msg=log_line)
-        raise EffluxApiException(f"{response.status_code}: {response.reason}")
-
+        raise EffluxApiException(response.status_code)
+            
     def GET(self, endpoint: str, ep_params: Dict = None) -> Result:
         return self._do(http_method='GET', endpoint=endpoint, ep_params=ep_params)
 
