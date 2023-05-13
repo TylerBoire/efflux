@@ -1,5 +1,6 @@
 from typing import List, Dict
 
+
 class Result:
     def __init__(self, status_code: int, message: str = '', data: List[Dict] = None):
         """
@@ -12,14 +13,17 @@ class Result:
         self.message = str(message)
         self.data = data if data else []
 
+
 class Scan:
-    def __init__(self, job_id: str, hosts: list,  ports: list, proto: str, fingerprint: int, status: str):
+    def __init__(self, job_id: str, hosts: list,  ports: list, proto: str, fingerprint: int, status: str, **kwargs):
         self.job_id = job_id
         self.hosts = hosts
         self.ports = ports
         self.proto = proto
         self.fingerprint = fingerprint
         self.status = status
-        #Someone else can impliment this if they want it, we dont use it
-        #if collect is not None:
+        # scoop up any other extra json
+        self.__dict__.update(kwargs)
+        # Someone else can impliment this if they want it, we dont use it
+        # if collect is not None:
         #    self.collect = collect
