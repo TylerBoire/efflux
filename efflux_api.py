@@ -16,12 +16,12 @@ class EffluxAPI:
             "fingerprint": fingerprint
         }
         _, _, data = self._rest_adapter.POST(endpoint='/scans', data=scan_data)
-        return Scan(**data)
+        return Scan.from_dict(data)
     
     def get_scan(self, job: str, details: bool = True) -> Scan:
         endpoint = "/scans/" + job + "?details=" + str(details)
         _, _, data = self._rest_adapter.GET(endpoint=endpoint)
-        return Scan(**data)
+        return Scan.from_dict(data)
     
     def get_scan_status(self, job: str) -> str:
         scan = self.get_scan(job=job,details=False)

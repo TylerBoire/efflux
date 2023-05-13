@@ -1,10 +1,21 @@
-from dataclasses import dataclass
+import dataclasses
 from typing import Optional
 from uuid import UUID
 from datetime import datetime
 
-@dataclass
-class BacnetCollection:
+class BaseData:
+
+    @classmethod
+    def from_dict(cls, parameters):
+        known_parameters = [ field.name for field in dataclasses.fields(cls) ]
+        for key in parameters.keys():
+            if key not in known_parameters:
+                print('Warning: Unrecognized key "{}"'.format(key))
+                del(parameters[key])
+        return cls(**parameters)
+
+@dataclasses.dataclass
+class BacnetCollection(BaseData):
     instance_number: Optional[int] = None
     vendor_id: Optional[int] = None
     vendor_name: Optional[str] = None
@@ -15,8 +26,8 @@ class BacnetCollection:
     description: Optional[str] = None
     location: Optional[str] = None
 
-@dataclass
-class FoxCollection:
+@dataclasses.dataclass
+class FoxCollection(BaseData):
     server_id: Optional[int] = None
     version: Optional[str] = None
     host_name: Optional[str] = None
@@ -36,8 +47,8 @@ class FoxCollection:
     sys_info: Optional[str] = None
     auth_agent_type: Optional[str] = None
 
-@dataclass
-class RDPCollection:
+@dataclasses.dataclass
+class RDPCollection(BaseData):
     target_name: Optional[str] = None
     proto_rdp: Optional[bool] = None
     proto_ssl: Optional[bool] = None
@@ -76,8 +87,8 @@ class RDPCollection:
     build: Optional[int] = None
     system_time: Optional[str] = None
 
-@dataclass
-class SIPCollection:
+@dataclasses.dataclass
+class SIPCollection(BaseData):
     response: Optional[str] = None
     accept: Optional[str] = None
     accept_encoding: Optional[str] = None
@@ -109,8 +120,8 @@ class SIPCollection:
     sdp_attributes: Optional[str] = None
     raw: Optional[str] = None
 
-@dataclass
-class S7Collection:
+@dataclasses.dataclass
+class S7Collection(BaseData):
     system: Optional[str] = None
     module: Optional[str] = None
     module_id: Optional[str] = None
@@ -126,24 +137,24 @@ class S7Collection:
     location: Optional[str] = None
     os: Optional[str] = None
 
-@dataclass
-class SMBCollection:
+@dataclasses.dataclass
+class SMBCollection(BaseData):
     major: Optional[int] = None
     minor: Optional[int] = None
     revision: Optional[int] = None
     version_string: Optional[str] = None
     native_os: Optional[str] = None
-    has_ntlm: Optional[bool] = None
+    has_ntlm: Optional[bool] = False
     ntlm: Optional[str] = None
     group_name: Optional[str] = None
-    smbv1_support: Optional[bool] = None
-    smb_dfs_support: Optional[bool] = None
-    smb_leasing_support: Optional[bool] = None
-    smb_multicredit_support: Optional[bool] = None
-    smb_multichan_support: Optional[bool] = None
-    smb_persistent_handle_support: Optional[bool] = None
-    smb_directory_leasing_support: Optional[bool] = None
-    smb_encryption_support: Optional[bool] = None
+    smbv1_support: Optional[bool] = False
+    smb_dfs_support: Optional[bool] = False
+    smb_leasing_support: Optional[bool] = False
+    smb_multicredit_support: Optional[bool] = False
+    smb_multichan_support: Optional[bool] = False
+    smb_persistent_handle_support: Optional[bool] = False
+    smb_directory_leasing_support: Optional[bool] = False
+    smb_encryption_support: Optional[bool] = False
     neg_protocol_id: Optional[str] = None
     neg_status: Optional[int] = None
     neg_command: Optional[int] = None
@@ -165,8 +176,8 @@ class SMBCollection:
     session_target_name: Optional[str] = None
     session_negotiate_flags: Optional[int] = None
 
-@dataclass
-class SSHCollection:
+@dataclasses.dataclass
+class SSHCollection(BaseData):
     version: Optional[str]
     software: Optional[str]
     misc: Optional[str]
@@ -180,32 +191,32 @@ class SSHCollection:
     banner: Optional[str]
     raw: Optional[str]
 
-@dataclass
-class TelnetCollection:
+@dataclasses.dataclass
+class TelnetCollection(BaseData):
     banner: Optional[str]
     do: Optional[str]
     will: Optional[str]
     wont: Optional[str]
     dont: Optional[str]
 
-@dataclass
-class Detection:
+@dataclasses.dataclass
+class Detection(BaseData):
     name: str
     matches: str
 
-@dataclass
-class AppDetection:
+@dataclasses.dataclass
+class AppDetection(BaseData):
     url: str
     detections: list[Detection]
 
     def __post_init__(self):
         if self.detections:
             self.detections = [
-                Detection(**value) for value in self.detections
+                Detection.from_dict(value) for value in self.detections
             ]
 
-@dataclass
-class Check:
+@dataclasses.dataclass
+class Check(BaseData):
     matched: Optional[str] = None
     check_name: Optional[str] = None
     check_type: Optional[str] = None
@@ -217,15 +228,15 @@ class Check:
     cvss_metrics: Optional[str] = None
     cvss_score: Optional[int] = None
 
-@dataclass
-class Metadata:
+@dataclasses.dataclass
+class Metadata(BaseData):
     asn: int
     as_org: str
     country: str
 
-@dataclass
-class Port:
-    open: bool
+@dataclasses.dataclass
+class Port(BaseData):
+    open: Optional[bool] = False
     service: Optional[str] = None
     software: Optional[str] = None
     version: Optional[str] = None
@@ -234,8 +245,8 @@ class Port:
     os: Optional[str] = None
     device_type: Optional[str] = None
     cpe: Optional[str] = None
-    tls: Optional[bool] = None
-    http: Optional[bool] = None
+    tls: Optional[bool] = False
+    http: Optional[bool] = False
     bacnet_collection: Optional[BacnetCollection] = None
     fox_collection: Optional[FoxCollection] = None
     rdp_collection: Optional[RDPCollection] = None
@@ -251,51 +262,52 @@ class Port:
 
     def __post_init__(self):
         if self.bacnet_collection:
-            self.bacnet_collection = BacnetCollection(**self.bacnet_collection)
+            self.bacnet_collection = BacnetCollection.from_dict(self.bacnet_collection)
 
         if self.fox_collection:
-            self.fox_collection = FoxCollection(**self.fox_collection)
+            self.fox_collection = FoxCollection.from_dict(self.fox_collection)
 
         if self.rdp_collection:
-            self.rdp_collection = RDPCollection(**self.rdp_collection)
+            self.rdp_collection = RDPCollection.from_dict(self.rdp_collection)
 
         if self.sip_collection:
-            self.sip_collection = SIPCollection(**self.sip_collection)
+            self.sip_collection = SIPCollection.from_dict(self.sip_collection)
 
         if self.s7_collection:
-            self.s7_collection = S7Collection(**self.s7_collection)
+            self.s7_collection = S7Collection.from_dict(self.s7_collection)
 
         if self.smb_collection:
-            self.smb_collection = SMBCollection(**self.smb_collection)
+            self.smb_collection = SMBCollection.from_dict(self.smb_collection)
 
         if self.ssh_collection:
-            self.ssh_collection = SSHCollection(**self.ssh_collection)
+            self.ssh_collection = SSHCollection.from_dict(self.ssh_collection)
 
         if self.telnet_collection:
-            self.telnet_collection = TelnetCollection(**self.telnet_collection)
+            self.telnet_collection = TelnetCollection.from_dict(self.telnet_collection)
 
         if self.app_detections:
             self.app_detections = [
-                AppDetection(**value) for value in self.app_detections
+                AppDetection.from_dict(value) for value in self.app_detections
             ]
 
-@dataclass
-class IP:
+@dataclasses.dataclass
+class IP(BaseData):
     metadata: Metadata
     ports: Optional[dict[str, Port]] = None
 
     def __post_init__(self):
         if self.ports:
             self.ports = {
-                port: Port(**value) for port, value in self.ports.items()
+                port: Port.from_dict(value) for port, value in self.ports.items()
             }
         if self.metadata:
-            self.metadata = Metadata(**self.metadata)
+            self.metadata = Metadata.from_dict(self.metadata)
 
-@dataclass
-class Scan:
+@dataclasses.dataclass
+class Scan(BaseData):
     job_id: UUID
-    proto: str
+    schedule_id: Optional[UUID] = None
+    proto: Optional[str] = None
     hosts: Optional[list[str]] = None
     ports: Optional[list[str]] = None
     host_count: Optional[int] = None
@@ -313,5 +325,5 @@ class Scan:
     def __post_init__(self):
         if self.results:
             self.results = {
-                host: IP(**value) for host, value in self.results.items()
+                host: IP.from_dict(value) for host, value in self.results.items()
             }

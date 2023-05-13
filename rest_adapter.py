@@ -7,9 +7,11 @@ from json import JSONDecodeError
 # imports local py files for error handling and data model for http req
 from .exceptions import EffluxApiException
 
-Result = tuple[int, str, dict]
 
 class RestAdapter:
+
+    Result = tuple[int, str, dict]
+
     def __init__(self, hostname: str = 'api.effluxio.com/api/', api_key: str = '', ver: str = 'v2', ssl_verify: bool = True, logger: logging.Logger = None):
         """
         Constructor for RestAdapter
@@ -57,6 +59,7 @@ class RestAdapter:
             self._logger.debug(msg=log_line)
             try:
                 data_out = response.json()
+                print(data_out) # ZZ
             except (ValueError, JSONDecodeError) as e:
                 raise EffluxApiException("Bad JSON in response") from e
             return response.status_code, response.reason, data_out
