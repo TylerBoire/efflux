@@ -1,0 +1,266 @@
+{
+    "job_id": "string",
+    "schedule_id": "string",
+    "proto": "string",
+    "hosts": [
+        "string"
+    ],
+    "host_lists": [
+        "string"
+    ],
+    "ports": [
+        "string"
+    ],
+    "port_lists": [
+        "string"
+    ],
+    "host_count": 0,
+    "port_count": 0,
+    "request_count": 0,
+    "fingerprint": 0,
+    "created_at": "string",
+    "started_at": "string",
+    "completed_at": "string",
+    "accessible_host_count": 0,
+    "accessible_port_count": 0,
+    "status": "string",
+    "results": {
+        "additionalProp1": {
+            "metadata": {
+                "asn": "string",
+                "as_org": "string",
+                "country": "string",
+                "info": "string"
+            },
+            "ports": {
+                "additionalProp1": {
+                    "open": true,
+                    "service": "string",
+                    "software": "string",
+                    "version": "string",
+                    "info": "string",
+                    "host_name": "string",
+                    "os": "string",
+                    "device_type": "string",
+                    "cpe": "string",
+                    "tls": true,
+                    "http": true,
+                    "bacnet_collection": {
+                        "instance_number": 0,
+                        "vendor_id": 0,
+                        "vendor_name": "string",
+                        "firmware_revision": "string",
+                        "software_revision": "string",
+                        "object_name": "string",
+                        "model_name": "string",
+                        "description": "string",
+                        "location": "string"
+                    },
+                    "fox_collection": {
+                        "server_id": 0,
+                        "version": "string",
+                        "host_name": "string",
+                        "host_address": "string",
+                        "app_name": "string",
+                        "app_version": "string",
+                        "vm_name": "string",
+                        "vm_version": "string",
+                        "os_name": "string",
+                        "os_version": "string",
+                        "station_name": "string",
+                        "language": "string",
+                        "time_zone": "string",
+                        "host_id": "string",
+                        "vm_id": "string",
+                        "brand_id": "string",
+                        "sys_info": "string",
+                        "auth_agent_type": "string"
+                    },
+                    "rdp_collection": {
+                        "target_name": "string",
+                        "proto_rdp": true,
+                        "proto_ssl": true,
+                        "proto_hybrid": true,
+                        "proto_rdstls": true,
+                        "proto_hybrid_ex": true,
+                        "cert_signature": "string",
+                        "cert_version": "string",
+                        "cert_serial_number": "string",
+                        "cert_not_before": "string",
+                        "cert_not_after": "string",
+                        "cert_issuer_country": "string",
+                        "cert_issuer_organization": "string",
+                        "cert_issuer_organizational_unit": "string",
+                        "cert_issuer_locality": "string",
+                        "cert_issuer_province": "string",
+                        "cert_issuer_street_address": "string",
+                        "cert_issuer_postal_code": "string",
+                        "cert_issuer_serial_number": "string",
+                        "cert_issuer_common_name": "string",
+                        "cert_subject_country": "string",
+                        "cert_subject_organization": "string",
+                        "cert_subject_organizational_unit": "string",
+                        "cert_subject_locality": "string",
+                        "cert_subject_province": "string",
+                        "cert_subject_street_address": "string",
+                        "cert_subject_postal_code": "string",
+                        "cert_subject_serial_number": "string",
+                        "cert_subject_common_name": "string",
+                        "net_bios_domain_name": "string",
+                        "net_bios_computer_name": "string",
+                        "dns_domain_name": "string",
+                        "dns_computer_name": "string",
+                        "major": 0,
+                        "minor": 0,
+                        "build": 0,
+                        "system_time": "string"
+                    },
+                    "sip_collection": {
+                        "response": "string",
+                        "accept": "string",
+                        "accept_encoding": "string",
+                        "accept_language": "string",
+                        "allow": "string",
+                        "allow_events": "string",
+                        "contact": "string",
+                        "content_encoding": "string",
+                        "content_language": "string",
+                        "content_type": "string",
+                        "proxy_authenticate": "string",
+                        "session_id": "string",
+                        "subject": "string",
+                        "supported": "string",
+                        "user_agent": "string",
+                        "via": "string",
+                        "warning": "string",
+                        "sdp_version": "string",
+                        "sdp_owner": "string",
+                        "sdp_name": "string",
+                        "sdp_information": "string",
+                        "sdp_uri": "string",
+                        "sdp_email": "string",
+                        "sdp_phone": "string",
+                        "sdp_connection": "string",
+                        "sdp_bandwidth": "string",
+                        "sdp_timezone": "string",
+                        "sdp_encryption_key": "string",
+                        "sdp_attributes": "string",
+                        "raw": "string"
+                    },
+                    "s7_collection": {
+                        "system": "string",
+                        "module": "string",
+                        "module_id": "string",
+                        "module_type": "string",
+                        "cpu_profile": "string",
+                        "hardware": "string",
+                        "firmware": "string",
+                        "plant_id": "string",
+                        "oem_id": "string",
+                        "memory_serial_number": "string",
+                        "copyright": "string",
+                        "serial_number": "string",
+                        "location": "string",
+                        "os": "string"
+                    },
+                    "smb_collection": {
+                        "major": 0,
+                        "minor": 0,
+                        "revision": 0,
+                        "version_string": "string",
+                        "native_os": "string",
+                        "has_ntlm": true,
+                        "ntlm": "string",
+                        "group_name": "string",
+                        "smbv1_support": true,
+                        "smb_dfs_support": true,
+                        "smb_leasing_support": true,
+                        "smb_multicredit_support": true,
+                        "smb_multichan_support": true,
+                        "smb_persistent_handle_support": true,
+                        "smb_directory_leasing_support": true,
+                        "smb_encryption_support": true,
+                        "neg_protocol_id": "string",
+                        "neg_status": 0,
+                        "neg_command": 0,
+                        "neg_credits": 0,
+                        "neg_flags": 0,
+                        "neg_security_mode": 0,
+                        "neg_dialect_revision": 0,
+                        "neg_server_guid": "string",
+                        "neg_capabilities": 0,
+                        "neg_system_time": 0,
+                        "neg_server_start_time": 0,
+                        "neg_authentication_types": "string",
+                        "session_protocol_id": "string",
+                        "session_status": 0,
+                        "session_command": 0,
+                        "session_credits": 0,
+                        "session_flags": 0,
+                        "session_setup_flags": 0,
+                        "session_target_name": "string",
+                        "session_negotiate_flags": 0
+                    },
+                    "ssh_collection": {
+                        "version": "string",
+                        "software": "string",
+                        "misc": "string",
+                        "pub_key": "string",
+                        "pub_key_type": "string",
+                        "kex_algs": "string",
+                        "ciphers": "string",
+                        "compression": "string",
+                        "macs": "string",
+                        "methods": "string",
+                        "banner": "string",
+                        "raw": "string"
+                    },
+                    "telnet_collection": {
+                        "banner": "string",
+                        "do": "string",
+                        "will": "string",
+                        "wont": "string",
+                        "dont": "string"
+                    },
+                    "app_detections": [
+                        {
+                            "url": "string",
+                            "detections": [
+                                {
+                                    "name": "string",
+                                    "matches": "string",
+                                    "version": "string",
+                                    "url": "string"
+                                }
+                            ]
+                        }
+                    ],
+                    "checks": [
+                        {
+                            "matched": "string",
+                            "check_name": "string",
+                            "check_type": "string",
+                            "severity": "string",
+                            "extract_name": "string",
+                            "extractions": [
+                                "string"
+                            ],
+                            "cve_id": [
+                                "string"
+                            ],
+                            "cwe_id": [
+                                "string"
+                            ],
+                            "cvss_metrics": "string",
+                            "cvss_score": 0
+                        }
+                    ],
+                    "bytes_rcvd": 0,
+                    "raw": [
+                        "string"
+                    ]
+                }
+            }
+        }
+    }
+}

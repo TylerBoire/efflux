@@ -1,14 +1,221 @@
 from dataclasses import dataclass
-from typing import Optional, Dict, List
+from typing import Optional
 from uuid import UUID
 from datetime import datetime
 
 @dataclass
-class Result:
-    status_code: int
-    message: str
-    data: Optional[List[Dict]] = None
+class BacnetCollection:
+    instance_number: Optional[int] = None
+    vendor_id: Optional[int] = None
+    vendor_name: Optional[str] = None
+    firmware_revision: Optional[str] = None
+    software_revision: Optional[str] = None
+    object_name: Optional[str] = None
+    model_name: Optional[str] = None
+    description: Optional[str] = None
+    location: Optional[str] = None
 
+@dataclass
+class FoxCollection:
+    server_id: Optional[int] = None
+    version: Optional[str] = None
+    host_name: Optional[str] = None
+    host_address: Optional[str] = None
+    app_name: Optional[str] = None
+    app_version: Optional[str] = None
+    vm_name: Optional[str] = None
+    vm_version: Optional[str] = None
+    os_name: Optional[str] = None
+    os_version: Optional[str] = None
+    station_name: Optional[str] = None
+    language: Optional[str] = None
+    time_zone: Optional[str] = None
+    host_id: Optional[str] = None
+    vm_id: Optional[str] = None
+    brand_id: Optional[str] = None
+    sys_info: Optional[str] = None
+    auth_agent_type: Optional[str] = None
+
+@dataclass
+class RDPCollection:
+    target_name: Optional[str] = None
+    proto_rdp: Optional[bool] = None
+    proto_ssl: Optional[bool] = None
+    proto_hybrid: Optional[bool] = None
+    proto_rdstls: Optional[bool] = None
+    proto_hybrid_ex: Optional[bool] = None
+    cert_signature: Optional[str] = None
+    cert_version: Optional[str] = None
+    cert_serial_number: Optional[str] = None
+    cert_not_before: Optional[str] = None
+    cert_not_after: Optional[str] = None
+    cert_issuer_country: Optional[str] = None
+    cert_issuer_organization: Optional[str] = None
+    cert_issuer_organizational_unit: Optional[str] = None
+    cert_issuer_locality: Optional[str] = None
+    cert_issuer_province: Optional[str] = None
+    cert_issuer_street_address: Optional[str] = None
+    cert_issuer_postal_code: Optional[str] = None
+    cert_issuer_serial_number: Optional[str] = None
+    cert_issuer_common_name: Optional[str] = None
+    cert_subject_country: Optional[str] = None
+    cert_subject_organization: Optional[str] = None
+    cert_subject_organizational_unit: Optional[str] = None
+    cert_subject_locality: Optional[str] = None
+    cert_subject_province: Optional[str] = None
+    cert_subject_street_address: Optional[str] = None
+    cert_subject_postal_code: Optional[str] = None
+    cert_subject_serial_number: Optional[str] = None
+    cert_subject_common_name: Optional[str] = None
+    net_bios_domain_name: Optional[str] = None
+    net_bios_computer_name: Optional[str] = None
+    dns_domain_name: Optional[str] = None
+    dns_computer_name: Optional[str] = None
+    major: Optional[int] = None
+    minor: Optional[int] = None
+    build: Optional[int] = None
+    system_time: Optional[str] = None
+
+@dataclass
+class SIPCollection:
+    response: Optional[str] = None
+    accept: Optional[str] = None
+    accept_encoding: Optional[str] = None
+    accept_language: Optional[str] = None
+    allow: Optional[str] = None
+    allow_events: Optional[str] = None
+    contact: Optional[str] = None
+    content_encoding: Optional[str] = None
+    content_language: Optional[str] = None
+    content_type: Optional[str] = None
+    proxy_authenticate: Optional[str] = None
+    session_id: Optional[str] = None
+    subject: Optional[str] = None
+    supported: Optional[str] = None
+    user_agent: Optional[str] = None
+    via: Optional[str] = None
+    warning: Optional[str] = None
+    sdp_version: Optional[str] = None
+    sdp_owner: Optional[str] = None
+    sdp_name: Optional[str] = None
+    sdp_information: Optional[str] = None
+    sdp_uri: Optional[str] = None
+    sdp_email: Optional[str] = None
+    sdp_phone: Optional[str] = None
+    sdp_connection: Optional[str] = None
+    sdp_bandwidth: Optional[str] = None
+    sdp_timezone: Optional[str] = None
+    sdp_encryption_key: Optional[str] = None
+    sdp_attributes: Optional[str] = None
+    raw: Optional[str] = None
+
+@dataclass
+class S7Collection:
+    system: Optional[str] = None
+    module: Optional[str] = None
+    module_id: Optional[str] = None
+    module_type: Optional[str] = None
+    cpu_profile: Optional[str] = None
+    hardware: Optional[str] = None
+    firmware: Optional[str] = None
+    plant_id: Optional[str] = None
+    oem_id: Optional[str] = None
+    memory_serial_number: Optional[str] = None
+    copyright: Optional[str] = None
+    serial_number: Optional[str] = None
+    location: Optional[str] = None
+    os: Optional[str] = None
+
+@dataclass
+class SMBCollection:
+    major: Optional[int] = None
+    minor: Optional[int] = None
+    revision: Optional[int] = None
+    version_string: Optional[str] = None
+    native_os: Optional[str] = None
+    has_ntlm: Optional[bool] = None
+    ntlm: Optional[str] = None
+    group_name: Optional[str] = None
+    smbv1_support: Optional[bool] = None
+    smb_dfs_support: Optional[bool] = None
+    smb_leasing_support: Optional[bool] = None
+    smb_multicredit_support: Optional[bool] = None
+    smb_multichan_support: Optional[bool] = None
+    smb_persistent_handle_support: Optional[bool] = None
+    smb_directory_leasing_support: Optional[bool] = None
+    smb_encryption_support: Optional[bool] = None
+    neg_protocol_id: Optional[str] = None
+    neg_status: Optional[int] = None
+    neg_command: Optional[int] = None
+    neg_credits: Optional[int] = None
+    neg_flags: Optional[int] = None
+    neg_security_mode: Optional[int] = None
+    neg_dialect_revision: Optional[int] = None
+    neg_server_guid: Optional[str] = None
+    neg_capabilities: Optional[int] = None
+    neg_system_time: Optional[int] = None
+    neg_server_start_time: Optional[int] = None
+    neg_authentication_types: Optional[str] = None
+    session_protocol_id: Optional[str] = None
+    session_status: Optional[int] = None
+    session_command: Optional[int] = None
+    session_credits: Optional[int] = None
+    session_flags: Optional[int] = None
+    session_setup_flags: Optional[int] = None
+    session_target_name: Optional[str] = None
+    session_negotiate_flags: Optional[int] = None
+
+@dataclass
+class SSHCollection:
+    version: Optional[str]
+    software: Optional[str]
+    misc: Optional[str]
+    pub_key: Optional[str]
+    pub_key_type: Optional[str]
+    kex_algs: Optional[str]
+    ciphers: Optional[str]
+    compression: Optional[str]
+    macs: Optional[str]
+    methods: Optional[str]
+    banner: Optional[str]
+    raw: Optional[str]
+
+@dataclass
+class TelnetCollection:
+    banner: Optional[str]
+    do: Optional[str]
+    will: Optional[str]
+    wont: Optional[str]
+    dont: Optional[str]
+
+@dataclass
+class Detection:
+    name: str
+    matches: str
+
+@dataclass
+class AppDetection:
+    url: str
+    detections: list[Detection]
+
+    def __post_init__(self):
+        if self.detections:
+            self.detections = [
+                Detection(**value) for value in self.detections
+            ]
+
+@dataclass
+class Check:
+    matched: Optional[str] = None
+    check_name: Optional[str] = None
+    check_type: Optional[str] = None
+    severity: Optional[str] = None
+    extract_name: Optional[str] = None
+    extractions: Optional [list[str]] = None
+    cve_id: Optional [list[str]] = None
+    cwe_id: Optional [list[str]] = None
+    cvss_metrics: Optional[str] = None
+    cvss_score: Optional[int] = None
 
 @dataclass
 class Metadata:
@@ -16,30 +223,81 @@ class Metadata:
     as_org: str
     country: str
 
-
 @dataclass
 class Port:
-    open: str
-    service: str
-    bytes_rcvd: int
+    open: bool
+    service: Optional[str] = None
     software: Optional[str] = None
+    version: Optional[str] = None
+    info: Optional[str] = None
+    host_name: Optional[str] = None
+    os: Optional[str] = None
+    device_type: Optional[str] = None
     cpe: Optional[str] = None
-    tls: Optional[str] = None
-    http: Optional[str] = None
+    tls: Optional[bool] = None
+    http: Optional[bool] = None
+    bacnet_collection: Optional[BacnetCollection] = None
+    fox_collection: Optional[FoxCollection] = None
+    rdp_collection: Optional[RDPCollection] = None
+    sip_collection: Optional[SIPCollection] = None
+    s7_collection: Optional[S7Collection] = None
+    smb_collection: Optional[SMBCollection] = None
+    ssh_collection: Optional[SSHCollection] = None
+    telnet_collection: Optional[TelnetCollection] = None
+    app_detections: Optional[list[AppDetection]] = None
+    checks: Optional[list[Check]] = None
+    bytes_rcvd: Optional[int] = None
+    raw: Optional[list[str]] = None
 
+    def __post_init__(self):
+        if self.bacnet_collection:
+            self.bacnet_collection = BacnetCollection(**self.bacnet_collection)
+
+        if self.fox_collection:
+            self.fox_collection = FoxCollection(**self.fox_collection)
+
+        if self.rdp_collection:
+            self.rdp_collection = RDPCollection(**self.rdp_collection)
+
+        if self.sip_collection:
+            self.sip_collection = SIPCollection(**self.sip_collection)
+
+        if self.s7_collection:
+            self.s7_collection = S7Collection(**self.s7_collection)
+
+        if self.smb_collection:
+            self.smb_collection = SMBCollection(**self.smb_collection)
+
+        if self.ssh_collection:
+            self.ssh_collection = SSHCollection(**self.ssh_collection)
+
+        if self.telnet_collection:
+            self.telnet_collection = TelnetCollection(**self.telnet_collection)
+
+        if self.app_detections:
+            self.app_detections = [
+                AppDetection(**value) for value in self.app_detections
+            ]
 
 @dataclass
 class IP:
     metadata: Metadata
-    ports: Dict[str, Port]
+    ports: Optional[dict[str, Port]] = None
 
+    def __post_init__(self):
+        if self.ports:
+            self.ports = {
+                port: Port(**value) for port, value in self.ports.items()
+            }
+        if self.metadata:
+            self.metadata = Metadata(**self.metadata)
 
 @dataclass
 class Scan:
     job_id: UUID
     proto: str
-    hosts: Optional[List[str]] = None
-    ports: Optional[List[str]] = None
+    hosts: Optional[list[str]] = None
+    ports: Optional[list[str]] = None
     host_count: Optional[int] = None
     port_count: Optional[int] = None
     request_count: Optional[int] = None
@@ -50,4 +308,10 @@ class Scan:
     accessible_host_count: Optional[int] = None
     accessible_port_count: Optional[int] = None
     status: Optional[str] = None
-    results: Optional[Dict[str, IP]] = None
+    results: Optional[dict[str, IP]] = None
+
+    def __post_init__(self):
+        if self.results:
+            self.results = {
+                host: IP(**value) for host, value in self.results.items()
+            }

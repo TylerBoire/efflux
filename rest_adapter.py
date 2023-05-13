@@ -1,17 +1,13 @@
 #!/bin/python3
 
-import json
-import argparse
 import requests
 import logging
-from urllib import response
-from typing import Dict, List
 from json import JSONDecodeError
 
 # imports local py files for error handling and data model for http req
 from .exceptions import EffluxApiException
-from .models import Result
 
+Result = tuple[int, str, dict]
 
 class RestAdapter:
     def __init__(self, hostname: str = 'api.effluxio.com/api/', api_key: str = '', ver: str = 'v2', ssl_verify: bool = True, logger: logging.Logger = None):
@@ -31,7 +27,7 @@ class RestAdapter:
         if not ssl_verify:
             requests.packages.urllib3.disable_warnings()
 
-    def _do(self, http_method: str, endpoint: str, ep_params: Dict = None, data: dict = None) -> Result:
+    def _do(self, http_method: str, endpoint: str, ep_params: dict = None, data: dict = None) -> Result:
 
         # Boiler plate stuff to do HTTP calls and logging.
         # used later in the def GET/POST/DELETE
@@ -63,7 +59,8 @@ class RestAdapter:
                 data_out = response.json()
             except (ValueError, JSONDecodeError) as e:
                 raise EffluxApiException("Bad JSON in response") from e
-            return Result(response.status_code, message=response.reason, data=data_out)
+            return response.status_code, response.reason, data_out
+        
         self._logger.error(msg=log_line)
         raise EffluxApiException(response.status_code)
 
