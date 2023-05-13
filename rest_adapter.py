@@ -59,7 +59,6 @@ class RestAdapter:
             self._logger.debug(msg=log_line)
             try:
                 data_out = response.json()
-                print(data_out) # ZZ
             except (ValueError, JSONDecodeError) as e:
                 raise EffluxApiException("Bad JSON in response") from e
             return response.status_code, response.reason, data_out

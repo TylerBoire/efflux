@@ -1,4 +1,5 @@
 import dataclasses
+import logging
 from typing import Optional
 from uuid import UUID
 from datetime import datetime
@@ -7,12 +8,15 @@ class BaseData:
 
     @classmethod
     def from_dict(cls, parameters):
+        logger = logging.getLogger(__name__)
         known_parameters = [ field.name for field in dataclasses.fields(cls) ]
-        for key in parameters.keys():
+        used_parameters = {}
+        for key, value in parameters.items():
             if key not in known_parameters:
-                print('Warning: Unrecognized key "{}"'.format(key))
-                del(parameters[key])
-        return cls(**parameters)
+                logger.error('Error: Unrecognized key "{}"'.format(key))
+            else:
+                used_parameters[key] = value
+        return cls(**used_parameters)
 
 @dataclasses.dataclass
 class BacnetCollection(BaseData):
