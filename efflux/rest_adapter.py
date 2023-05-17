@@ -1,25 +1,22 @@
-#!/bin/python3
-
 import requests
 import logging
 from json import JSONDecodeError
-
-# imports local py files for error handling and data model for http req
 from .exceptions import EffluxApiException
 
 
 class RestAdapter:
 
+    #[response.status_code, response.reason, data_out]
     Result = tuple[int, str, dict]
 
     def __init__(self, hostname: str = 'api.effluxio.com/api/', api_key: str = '', ver: str = 'v2', ssl_verify: bool = True, logger: logging.Logger = None):
-        """
-        Constructor for RestAdapter
-        :param hostname: Normally, api.effluxio.com/api/
-        :param api_key: (optional) string used for authentication when POSTing or DELETEing
-        :param ver: v1 or v2
-        :param ssl_verify: Normally set to True, but if having SSL/TLS cert validation issues, can turn off with False
-        :param logger: (optional) If your app has a logger, pass it in here.
+        """__init__ Constructor for RestAdapter
+        Args:
+            hostname (str, optional): API Hostname. Defaults to 'api.effluxio.com/api/'.
+            api_key (str, optional): API Key. Defaults to ''.
+            ver (str, optional): API Version. Defaults to 'v2'.
+            ssl_verify (bool, optional): Verify SSL. Defaults to True.
+            logger (logging.Logger, optional): Pass the logger here. Defaults to None.
         """
 
         self._logger = logger or logging.getLogger(__name__)
@@ -30,9 +27,20 @@ class RestAdapter:
             requests.packages.urllib3.disable_warnings()
 
     def _do(self, http_method: str, endpoint: str, ep_params: dict = None, data: dict = None) -> Result:
+        """_do Boiler plate HTTP Calls and logging
 
-        # Boiler plate stuff to do HTTP calls and logging.
-        # used later in the def GET/POST/DELETE
+        Args:
+            http_method (str): HTTP request method. GET,POST,PUT,DELETE
+            endpoint (str): API Endpoint
+            ep_params (dict, optional): Endpoint parameters. Defaults to None.
+            data (dict, optional): Data to add to HTTP call. Defaults to None.
+
+        Raises:
+            EffluxApiException: Error response based on API code
+
+        Returns:
+            Result: Returns HTTP Response in a tule[response.status_code, response.reason, data_out]
+        """
 
         full_url = self.url + endpoint
         headers = {'accept': 'application/json',

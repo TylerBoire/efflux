@@ -19,6 +19,33 @@ class BaseData:
         return cls(**used_parameters)
 
 @dataclasses.dataclass
+class VNCCollection(BaseData):
+    banner: Optional [str] = None
+    big_endian: Optional [bool] = False
+    bits_per_pixel: Optional[int] = None
+    blue_max: Optional[int] = None
+    blue_shift: Optional[int] = None
+    client_security_type: Optional [str] = None
+    client_version: Optional [str] = None
+    depth: Optional[int] = None
+    frame_buffer_height: Optional[int] = None
+    frame_buffer_width: Optional[int] = None
+    green_max: Optional[int] = None
+    green_shift: Optional[int] = None
+    handshake_status: Optional [str] = None
+    name: Optional [str] = None
+    red_max: Optional[int] = None
+    red_shift: Optional[int] = None
+    security_reject_reason: Optional [str] = None
+    security_types: Optional [list[str]] = None
+    true_color: Optional [bool] = False
+    version: Optional [str] = None
+    version_major: Optional[int] = None
+    version_minor: Optional[int] = None
+    version_reject_reason: Optional [str] = None
+    vnc_auth_challenge: Optional [str] = None
+
+@dataclasses.dataclass
 class BacnetCollection(BaseData):
     instance_number: Optional[int] = None
     vendor_id: Optional[int] = None
@@ -251,6 +278,7 @@ class Port(BaseData):
     cpe: Optional[str] = None
     tls: Optional[bool] = False
     http: Optional[bool] = False
+    vnc_collection: Optional[VNCCollection] = None
     bacnet_collection: Optional[BacnetCollection] = None
     fox_collection: Optional[FoxCollection] = None
     rdp_collection: Optional[RDPCollection] = None
@@ -265,6 +293,9 @@ class Port(BaseData):
     raw: Optional[list[str]] = None
 
     def __post_init__(self):
+        if self.vnc_collection:
+            self.vnc_collection = VNCCollection.from_dict(self.vnc_collection)
+
         if self.bacnet_collection:
             self.bacnet_collection = BacnetCollection.from_dict(self.bacnet_collection)
 
