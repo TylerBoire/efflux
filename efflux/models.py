@@ -234,6 +234,8 @@ class TelnetCollection(BaseData):
 class Detection(BaseData):
     name: Optional[str]
     matches: Optional[str]
+    url: Optional[str]
+    version: Optional[str]
 
 @dataclasses.dataclass
 class AppDetection(BaseData):
