@@ -209,43 +209,43 @@ class SMBCollection(BaseData):
 
 @dataclasses.dataclass
 class SSHCollection(BaseData):
-    version: Optional[str]
-    software: Optional[str]
-    misc: Optional[str]
-    pub_key: Optional[str]
-    pub_key_type: Optional[str]
-    kex_algs: Optional[str]
-    ciphers: Optional[str]
-    compression: Optional[str]
-    macs: Optional[str]
-    methods: Optional[str]
-    banner: Optional[str]
-    raw: Optional[str]
+    version: Optional[str] = None
+    software: Optional[str] = None
+    misc: Optional[str] = None
+    pub_key: Optional[str] = None
+    pub_key_type: Optional[str] = None
+    kex_algs: Optional[str] = None
+    ciphers: Optional[str] = None
+    compression: Optional[str] = None
+    macs: Optional[str] = None
+    methods: Optional[str] = None
+    banner: Optional[str] = None
+    raw: Optional[str] = None
 
 @dataclasses.dataclass
 class TelnetCollection(BaseData):
-    banner: Optional[str]
-    do: Optional[str]
-    will: Optional[str]
-    wont: Optional[str]
-    dont: Optional[str]
+    banner: Optional[str] = None
+    do: Optional[str] = None
+    will: Optional[str] = None 
+    wont: Optional[str] = None
+    dont: Optional[str] = None
 
 @dataclasses.dataclass
 class Detection(BaseData):
-    name: Optional[str]
-    matches: Optional[str]
-    url: Optional[str]
-    version: Optional[str]
+    name: Optional[str] = None
+    matches: Optional[str] = None
+    url: Optional[str] = None
+    version: Optional[str] = None
 
 @dataclasses.dataclass
 class AppDetection(BaseData):
-    url: str
-    detections: list[Detection]
+    url: Optional[str] = None
+    detections: list[Detection] = None
 
     def __post_init__(self):
         if self.detections:
             self.detections = [
-                Detection.from_dict(value) for value in self.detections
+               Detection.from_dict(value) for value in self.detections
             ]
 
 @dataclasses.dataclass
@@ -263,9 +263,9 @@ class Check(BaseData):
 
 @dataclasses.dataclass
 class Metadata(BaseData):
-    asn: Optional[int]
-    as_org: Optional[str]
-    country: Optional[str]
+    asn: Optional[int] = None
+    as_org: Optional[str] = None
+    country: Optional[str] = None
 
 @dataclasses.dataclass
 class Port(BaseData):
@@ -329,7 +329,7 @@ class Port(BaseData):
 
 @dataclasses.dataclass
 class IP(BaseData):
-    metadata: Metadata
+    metadata: Optional[Metadata] = None
     ports: Optional[dict[str, Port]] = None
 
     def __post_init__(self):
