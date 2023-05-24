@@ -232,8 +232,8 @@ class TelnetCollection(BaseData):
 
 @dataclasses.dataclass
 class Detection(BaseData):
-    name: str
-    matches: str
+    name: Optional[str]
+    matches: Optional[str]
 
 @dataclasses.dataclass
 class AppDetection(BaseData):
@@ -261,9 +261,9 @@ class Check(BaseData):
 
 @dataclasses.dataclass
 class Metadata(BaseData):
-    asn: int
-    as_org: str
-    country: str
+    asn: Optional[int]
+    as_org: Optional[str]
+    country: Optional[str]
 
 @dataclasses.dataclass
 class Port(BaseData):
